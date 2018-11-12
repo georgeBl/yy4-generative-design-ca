@@ -1,92 +1,123 @@
 /**
- * typo outline displayed as dots
+ * 4 symetric canvas roteted to the middle
  *
  * KEYS
- * a-z                  : text input (keyboard)
- * backspace            : delete last typed letter
  * ctrl                 : save png
  */
 
-var textTyped = "motyf2018";
 
-var font;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  noLoop();
+  //canvas should resemble an A4 paper
+  createCanvas(1240, 1748);
+  //colormode set function - HSB in this example
+  colorMode(HSB, 360, 100, 100, 100);
 
-  opentype.load('data/FreeSans.otf', function(err, f) {
-    if (err) {
-      console.log(err);
-    } else {
-      font = f;
-      loop();
-    }
-  });
+  //background black just for testing
+  // background(0);
+
+  // //          -- separate the canvas --
+  // //top-left  -- 0,0
+  // fill(random(360),random(100),random(100));
+  // rect(0,0,width/2,height/2);
+  //
+  // //top-right  -- width/2,0
+  // fill(random(360),random(100),random(100));
+  // rect(width/2,0,width/2,height/2);
+  //
+  // //bottom-left  -- 0,height/2
+  // fill(random(360),random(100),random(100));
+  // rect(0,height/2,width/2,height/2);
+  //
+  // //bottom-right  -- width/2,height/2
+  // fill(random(360),random(100),random(100));
+  // rect(width/2,height/2,width/2,height/2);
+
+  // //try to use translate and draw rectangles in the same position (don't forget push() and pop())
+  // //top-left
+  // push();
+  // translate(0,0);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // strokeWeight(4);
+  // line(20,20,100,200);
+  // pop();
+  //
+  // //top-right
+  // push();
+  // translate(width/2,0);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // stroke(20);
+  // line(20,20,100,200);
+  // pop();
+  //
+  // //bottom-left
+  // push();
+  // translate(0,height/2);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // line(20,20,100,200);
+  // pop();
+  //
+  // //bottom-right
+  // push();
+  // translate(width/2,height/2);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // line(20,20,70,70);
+  // pop();
+
+  // rotate the rectangle
+  //top-left
+  push();
+  rectMode(CENTER);
+  translate(0,0);
+  rotate(0);
+  fill(random(360),random(100),random(100));
+  rect(0, 0, width/2, height/2);
+  strokeWeight(10);
+  line(20,20,250,350);
+  pop();
+  //
+  // //top-right
+  // push();
+  // translate(width/4,height/4);
+  // rotate(radians(20));
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // strokeWeight(10);
+  // line(20,20,70,70);
+  // pop();
+  //
+  // //bottom-left
+  // push();
+  // translate(0,height/2);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // strokeWeight(10);
+  // line(20,20,70,70);
+  // pop();
+  //
+  // //bottom-right
+  // push();
+  // translate(width/2,height/2);
+  // fill(random(360),random(100),random(100));
+  // rect(0,0, width/2, height/2);
+  // strokeWeight(10);
+  // line(20,20,70,70);
+  // pop();
+
+
 }
 
 function draw() {
-  if (!font) return;
 
-  background(255);
-  // margin border
-  translate(20, 540);
 
-  if (textTyped.length > 0) {
-    // get a path from OpenType.js
-    lineDensity = map(mouseX,0,width,2,60);
-    
-      var fontPath = font.getPaths(textTyped, 0, 0, 200);
-    // convert it to a g.Path object
-      for(var x = 0; x < fontPath.length; x++){
-        var path = new g.Path(fontPath[x].commands);
-       //console.log(path)
-        path = g.resampleByLength(path, lineDensity);
-       
-       
-        var diameter = 3;
-        
-        for (var i = 0; i < path.commands.length; i++) {
-          var pnt = path.commands[i];
-             fill(0);
-            noStroke();
-          ellipse(pnt.x, pnt.y, diameter, diameter);
-        }
-
-        fill(0);
-        stroke(3);
-        
-        
-        for (var ii = 0; ii < path.commands.length; ii++) {
-            var numOfPoints = path.commands.length;
-            var pnt1 = path.commands[ii];
-            var pnt2 = path.commands[(i+3) % numOfPoints];
-           
-            line(pnt1.x, pnt1.y, pnt2.x, pnt2.y);
-        }
-
-       
-      }
-  }
-    //noLoop();
 
 }
 
 function keyReleased() {
   // export png
   if (keyCode == CONTROL) saveCanvas(gd.timestamp(), 'png');
-}
-
-function keyPressed() {
-  if (keyCode == DELETE || keyCode == BACKSPACE) {
-    if (textTyped.length > 0) {
-      textTyped = textTyped.substring(0, textTyped.length - 1);
-    }
-  }
-}
-
-function keyTyped() {
-  if (keyCode >= 32) {
-    textTyped += key;
-  }
 }
